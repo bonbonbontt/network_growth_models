@@ -22,3 +22,16 @@ def get_discrete_distribution(data):
     vals, freq = map(np.array, zip(*sorted(counter.items())))
     prob = freq/float(np.sum(freq))
     return vals, prob
+
+def get_fitted_parameters():
+    """return fitted parameters for hz, arw, sk, hk, dms, ff, lapa, hpa]"""
+    with open('data/params.pkl', 'r') as f:
+        params = pickle.load(f)
+    return params
+
+def get_fits_info():
+    return pd.read_pickle('data/wsdm_fits_data.pkl')
+
+if __name__ == '__main__':
+    params = get_fitted_parameters()
+    info = get_fits_info()
