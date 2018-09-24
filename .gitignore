@@ -2,6 +2,9 @@
 
 #####=== Python ===#####
 .ipynb_checkpoints/
+data/networks/patents.pkl
+data/networks/semantic.pkl
+data/networks/aps.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
