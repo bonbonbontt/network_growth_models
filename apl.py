@@ -20,7 +20,7 @@ def run(g, fname, update_every=None):
 	random.shuffle(nids)
 	sampled_nids = set()
 
-	while (len(sampled_nids) < N:
+	while (len(sampled_nids) < N):
 		# sample a node, compute its lengths
 		nid = nids.pop()
 		pl = netprop.get_node_path_length(g, nid)
