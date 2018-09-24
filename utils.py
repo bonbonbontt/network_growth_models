@@ -6,7 +6,6 @@ import igraph as ig
 import networkx as nx
 import seaborn as sns
 
-
 def ig_to_nx(ig_graph, directed=False, nodes=None):
     """map igraph Graph object to networkx Graph object"""
     g = nx.DiGraph() if directed else nx.Graph()
@@ -33,5 +32,4 @@ def get_fits_info():
     return pd.read_pickle('data/wsdm_fits_data.pkl')
 
 if __name__ == '__main__':
-    params = get_fitted_parameters()
-    info = get_fits_info()
+    pass
