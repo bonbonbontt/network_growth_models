@@ -15,12 +15,12 @@ def run(g, fname, update_every=None):
 	# load input
 	f_out = open(fname, 'a')
 	g = g.as_undirected()
-
+	N = len(g.vs)
 	nids = g.vs.indices[:]
 	random.shuffle(nids)
 	sampled_nids = set()
 
-	while (len(sampled_nids) < len(g.vs)):
+	while (len(sampled_nids) < N:
 		# sample a node, compute its lengths
 		nid = nids.pop()
 		pl = netprop.get_node_path_length(g, nid)
@@ -32,7 +32,7 @@ def run(g, fname, update_every=None):
 		sampled_nids.add(nid)
 
 		if update_every and (len(sampled_nids) % update_every == 0):
-			print "{}/{} nodes done".format(len(sampled_nids), len(nids))
+			print "{}/{} nodes done".format(len(sampled_nids), N)
 
 	close(f_out)
 	return input
