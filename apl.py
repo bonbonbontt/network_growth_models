@@ -34,7 +34,7 @@ def run(g, fname, update_every=None):
 		if update_every and (len(sampled_nids) % update_every == 0):
 			print "{}/{} nodes done".format(len(sampled_nids), N)
 
-	close(f_out)
+	f_out.close()
 	return input
 
 if __name__ == '__main__':

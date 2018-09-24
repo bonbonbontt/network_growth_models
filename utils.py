@@ -31,5 +31,13 @@ def get_fitted_parameters():
 def get_fits_info():
     return pd.read_pickle('data/wsdm_fits_data.pkl')
 
+def update_ax(ax, title=None, xlabel=None, ylabel=None, legend_loc='best', despine=True):
+    if title: ax.set_title(title)
+    if xlabel: ax.set_xlabel(xlabel)
+    if ylabel: ax.set_ylabel(ylabel)
+    if legend_loc: ax.legend(loc=legend_loc)
+    if despine: sns.despine(ax=ax)
+    return ax
+
 if __name__ == '__main__':
     pass
