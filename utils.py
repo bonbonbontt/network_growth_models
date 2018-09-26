@@ -5,6 +5,8 @@ import pandas as pd
 import igraph as ig
 import networkx as nx
 import seaborn as sns
+import baselines
+import misc
 
 def ig_to_nx(ig_graph, directed=False, nodes=None):
     """map igraph Graph object to networkx Graph object"""
@@ -46,5 +48,55 @@ def get_spaced_data_generator(fname, proc=None):
             if proc: splitted_line = proc(splitted_line)
             yield splitted_line
 
+#########
+######### code to generate fitted networks
+#########
+
+def get_input(graph, time_attr, discard_pct, init_pct, cat_attr=None):
+    return misc.get_discard_graph_params(graph, time_attr, discard_pct,
+                                         init_pct, debug=False, attrs=cat_attr)
+
+def generate_graph(model_name, params, input_data, debug=False):
+    gpre, chunks, outdegs = [input_data[k] for k in ['gpre', 'chunk_sizes', 'mean_outdegs']]
+    if model_name in ['sk', 'hz', 'hk']:
+        cls = baselines.baselines_dict[model_name]
+        g = cls(params, gpre=gpre, debug=debug)
+    elif model_name == 'dms':
+        g = cls['dms'](gpre=gpre, outpref=False, zero_appeal=params)
+    else:
+        # TODO: add ARW
+        g = None
+    g.add_nodes(chunks, outdegs)
+    return g
+
+def get_network_fit(model_name, dataset_name):
+    """
+    use fitted parameters and input to generate a network
+    using model_name for dataset_name.
+    ------
+    model: dms, rl, hk, sk, hz, arw
+    dataset: (small) hepph, judicial, acl (large) aps, patetnts, semantic
+    """
+    dset = ig.Graph.Read_Pickle('data/networks/{}.pkl'.format(dataset_name))
+
+    # get parameters
+    params_data = get_fitted_parameters()
+    fitted_params = params_data[model_name][dataset_name]
+
+    # get input data
+    time_attr = 'year2' if dataset_name in ['patents'] else 'time'
+    cat_attr = None
+    discard_pct = 0.1 if dataset_name in ['patents'] else 0.05
+    initial_pct = 0.01
+    input_data = get_input(dset, time_attr, discard_pct, initial_pct, cat_attr=cat_attr)
+
+    graph = generate_graph(model_name, fitted_params, input_data)
+
+    return {
+        'dset': dset,
+        'input': input_data,
+        'graph': graph
+    }
+
 if __name__ == '__main__':
-    pass
+    d = get_network_fit('hk', 'hepph')

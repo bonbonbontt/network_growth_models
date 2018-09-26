@@ -415,3 +415,10 @@ class SaramakiKaskiRandomWalk(HereraZufiriaRandomWalk):
 				tries = 0 # reset
 
 		return marked
+
+baselines_dict = {
+	'hz': HereraZufiriaRandomWalk,
+	'sk': SaramakiKaskiRandomWalk,
+	'hk': Holmes,
+	'dms': Barabasi
+}
