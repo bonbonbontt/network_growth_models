@@ -39,5 +39,12 @@ def update_ax(ax, title=None, xlabel=None, ylabel=None, legend_loc='best', despi
     if despine: sns.despine(ax=ax)
     return ax
 
+def get_spaced_data_generator(fname, proc=None):
+    with open(fname, 'r') as f:
+        for line in f:
+            splitted_line = line.split(' ')
+            if proc: splitted_line = proc(splitted_line)
+            yield splitted_line
+
 if __name__ == '__main__':
     pass
