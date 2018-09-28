@@ -11,6 +11,9 @@ import utils
 import apl
 import os
 
+'''
+Generate graphs
+'''
 def apl_model(model_names, dataset_names, N):
 	for i in range(N):
 		for model in model_names:
@@ -24,6 +27,9 @@ def _apl_model(model_name, dname, n):
 	ig.Graph.write_pickle(g, fname=fname)
 	print (fname + ' done!')
 
+'''
+Run apl each graph
+'''
 def run_model():
 	# get input file list
 	in_path = "data/models_apl_outputs/graphs"
@@ -47,6 +53,9 @@ def run_model():
 			print(fname + " done!")
 			break
 
+'''
+Put three rounds of outputs into one file
+'''
 def serialize(model_names, dataset_names):
 	for mname in model_names:
 		for dname in dataset_names:
