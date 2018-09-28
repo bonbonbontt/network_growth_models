@@ -47,14 +47,24 @@ def run_model():
 			print(fname + " done!")
 			break
 
-
-
-
-
+def serialize(model_names, dataset_names):
+	for mname in model_names:
+		for dname in dataset_names:
+			prefix = mname + '_' + dname
+			print ('serializing %s'%prefix)
+			all_files = os.listdir('data/models_apl_outputs/apl_outputs')
+			f = open('data/models_apl_outputs/%s_all.txt'%prefix, 'w')
+			for fname in all_files:
+				if prefix in fname:
+					fin = open('data/models_apl_outputs/apl_outputs/' + fname)
+					f.write(fin.read())
+					fin.close()
+					print (fname + " done!")
 
 
 if __name__ == '__main__':
 	model_names = ['hk', 'hz', 'sk']
 	dataset_names = ['judicial', 'hepph', 'acl']
 	# apl_model(model_names,dataset_names,3)
-	run_model()
+	# run_model()
+	serialize(model_names, dataset_names)
