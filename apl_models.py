@@ -33,6 +33,9 @@ def run_model():
 	out_path = "data/models_apl_outputs/apl_outputs"
 	all_out_files = os.listdir(out_path)
 
+	if len(all_in_files) == len(all_out_files):
+		print("All done!")
+
 	for f in all_in_files:
 		fname = f.split('.')[0] + '.txt'
 		if fname not in all_out_files:
@@ -42,17 +45,16 @@ def run_model():
 			g = ig.Graph.Read_Pickle(graph_path)
 			apl.run(g, out_path, 100)
 			print(fname + " done!")
+			break
 
 
 
-	
 
-	
+
+
 
 if __name__ == '__main__':
 	model_names = ['hk', 'hz', 'sk']
 	dataset_names = ['judicial', 'hepph', 'acl']
 	# apl_model(model_names,dataset_names,3)
 	run_model()
-
-
