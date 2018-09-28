@@ -43,9 +43,7 @@ def run_model():
 			apl.run(g, out_path, 100)
 			print(fname + " done!")
 
-	# graph_path = in_path + '/' + all_files[0]
-	# output_fname = all_files[0].split('.')[0]
-	# out_path = "data/models_apl_outputs/apl_outputs/%s.txt"%output_fname
+
 
 	
 
