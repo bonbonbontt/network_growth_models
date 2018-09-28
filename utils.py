@@ -98,29 +98,7 @@ def get_network_fit(model_name, dataset_name):
         'graph': graph
     }
 
-def apl_model(model_names, dataset_names, N):
-	for i in range(N):
-		for model in model_names:
-			for dataset in dataset_names:
-				_apl_model(model, dataset, i)
-
-
-def _apl_model(model_name, dname, n):
-	g = get_network_fit(model_name, dname)['graph'].g
-	fname = 'data/models_apl_outputs/graphs/%s_%s_%d.pkl'%(model_name, dname, (n+1))
-	ig.Graph.write_pickle(g, fname=fname)
-	print (fname + ' done!')
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
-    # d = get_network_fit('hk', 'hepph')
-    # print()
-    model_names = ['hk', 'hz', 'sk']
-    dataset_names = ['judicial', 'hepph', 'acl']
-    apl_model(model_names,dataset_names,3)
+    d = get_network_fit('hk', 'hepph')
+   
