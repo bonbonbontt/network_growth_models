@@ -57,16 +57,23 @@ def get_input(graph, time_attr, discard_pct, init_pct, cat_attr=None):
                                          init_pct, debug=False, attrs=cat_attr)
 
 def generate_graph(model_name, params, input_data, debug=False):
-    gpre, chunks, outdegs = [input_data[k] for k in ['gpre', 'chunk_sizes', 'mean_outdegs']]
+    keys = ['gpre', 'chunk_sizes', 'mean_outdegs', 'chunk_sampler']
+    gpre, chunks, outdegs, chs = [input_data[k] for k in keys]
+
     if model_name in ['sk', 'hz', 'hk']:
         cls = baselines.baselines_dict[model_name]
         g = cls(params, gpre=gpre, debug=debug)
+        g.add_nodes(chunks, outdegs)
+
     elif model_name == 'dms':
-        g = cls['dms'](gpre=gpre, outpref=False, zero_appeal=params)
+        g = baselines.baselines_dict['dms'](gpre=gpre, outpref=False, zero_appeal=params)
+        g.add_nodes(chunks, outdegs)
+
     else:
-        # TODO: add ARW
-        g = None
-    g.add_nodes(chunks, outdegs)
+        g = baselines.baselines_dict['arw'](params['p_diff'], params['p_same'],
+                                            params['jump'], params['out'], gpre)
+        g.add_nodes(chunks, outdegs, chs)
+
     return g
 
 def get_network_fit(model_name, dataset_name):
@@ -77,18 +84,26 @@ def get_network_fit(model_name, dataset_name):
     model: dms, rl, hk, sk, hz, arw
     dataset: (small) hepph, judicial, acl (large) aps, patetnts, semantic
     """
+    attr_models = ['arw', 'lapa']
+    attr_datasets = ['patents', 'aps', 'acl']
+    use_attr = model_name in attr_models and dataset_name in attr_datasets
+
     dset = ig.Graph.Read_Pickle('data/networks/{}.pkl'.format(dataset_name))
 
     # get parameters
     params_data = get_fitted_parameters()
     fitted_params = params_data[model_name][dataset_name]
+    print (fitted_params)
 
     # get input data
     time_attr = 'year2' if dataset_name in ['patents'] else 'time'
-    cat_attr = None
-    discard_pct = 0.1 if dataset_name in ['patents'] else 0.05
-    initial_pct = 0.01
+    cat_attr = 'single_attr' if use_attr else None
+
+    default_discard = 0.1 if dataset_name in ['patents'] else 0.05
+    discard_pct = fitted_params['discard'] if model_name == 'arw' else default_discard
+    initial_pct = fitted_params['init'] if model_name == 'arw' else 0.01
     input_data = get_input(dset, time_attr, discard_pct, initial_pct, cat_attr=cat_attr)
+    print (input_data.keys())
 
     graph = generate_graph(model_name, fitted_params, input_data)
 
@@ -98,7 +113,7 @@ def get_network_fit(model_name, dataset_name):
         'graph': graph
     }
 
-
 if __name__ == '__main__':
-    d = get_network_fit('hk', 'hepph')
-   
+    d = get_network_fit('arw', 'judicial')
+    print (d['graph'].g.summary())
+
