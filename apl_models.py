@@ -23,12 +23,11 @@ def apl_model(model_names, dataset_names, N):
 def _apl_model(model_name, dname, n):
 	g = utils.get_network_fit(model_name, dname)['graph'].g
 	fname = 'data/models_apl_outputs/graphs/%s_%s_%d.pkl'%(model_name, dname, (n+1))
-	fname = "test"
 	ig.Graph.write_pickle(g, fname=fname)
 	print (fname + ' done!')
 
 '''
-Run apl each graph
+Run apl for each graph in data/models_apl_outputs/graphs but not having output in data/models_apl_outputs/apl_outputs
 '''
 def run_model():
 	# get input file list
@@ -42,6 +41,7 @@ def run_model():
 	if len(all_in_files) == len(all_out_files):
 		print("All done!")
 
+
 	for f in all_in_files:
 		fname = f.split('.')[0] + '.txt'
 		if fname not in all_out_files:
@@ -54,7 +54,7 @@ def run_model():
 			break
 
 '''
-Put three rounds of outputs into one file
+Put all rounds of outputs into one file
 '''
 def serialize(model_names, dataset_names):
 	for mname in model_names:
@@ -72,7 +72,7 @@ def serialize(model_names, dataset_names):
 
 
 if __name__ == '__main__':
-	model_names = ['hk', 'hz', 'sk']
+	model_names = ['arw']
 	dataset_names = ['judicial', 'hepph', 'acl']
 	# apl_model(model_names,dataset_names,3)
 	# run_model()
